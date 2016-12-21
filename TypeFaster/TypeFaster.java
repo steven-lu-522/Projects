@@ -31,7 +31,8 @@ public class TypeFaster {
                 JFrame importWindow = new JFrame();
                 JLabel label = new JLabel("Please enter the name of the file you want to import:");
                 importWindow.setSize(300,100);
-                importWindow.add(label, BorderLayout.NORTH);
+                importWindow.setLayout(new BoxLayout(importWindow.getContentPane(), BoxLayout.Y_AXIS));
+                importWindow.add(label);
                 JTextArea fileName = new JTextArea();
                 class enterListener implements KeyListener {
                     public void keyPressed(KeyEvent event) {
@@ -48,14 +49,15 @@ public class TypeFaster {
                     public void keyTyped(KeyEvent event) {}
                 }
                 fileName.addKeyListener(new enterListener());
-                importWindow.add(fileName, BorderLayout.SOUTH);
+                importWindow.add(fileName);
                 importWindow.setVisible(true);
             }
         }
         openApp.addActionListener(new startListener());
         importer.addActionListener(new importListener());
-        menu.add(openApp, BorderLayout.NORTH);
-        menu.add(importer, BorderLayout.SOUTH);
+        menu.setLayout(new BoxLayout(menu.getContentPane(), BoxLayout.Y_AXIS));
+        menu.add(openApp);
+        menu.add(importer);
         menu.setVisible(true);
         menu.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.Y_AXIS));
