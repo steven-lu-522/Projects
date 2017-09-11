@@ -1,10 +1,8 @@
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.*;
 
 //Time duration between specific keystrokes (e.g. e ->t), highlight weaknesses, maybe have an option to emphasize this key pairing
 public class TypeFaster {
@@ -69,7 +67,22 @@ public class TypeFaster {
         display.setWrapStyleWord(true);
         display.setEditable(false);
         display.setText(backEnd.getCurrentSample());
-        JTextField typingArea = new JTextField();
+        JTextArea typingArea = new JTextArea();
+        typingArea.setText("Click here to begin typing.");
+        typingArea.setForeground(Color.lightGray);
+        class ClickListener implements MouseListener{
+            public void mouseEntered(MouseEvent me){}
+            public void mouseReleased(MouseEvent me){}
+            public void mousePressed(MouseEvent me) {}
+            public void mouseExited(MouseEvent me){}
+            public void mouseClicked(MouseEvent me) {
+                if (typingArea.getText().compareTo("Click here to begin typing.") == 0) {
+                    typingArea.setForeground(Color.BLACK);
+                    typingArea.setText("");
+                }
+            }
+        }
+        typingArea.addMouseListener(new ClickListener());
         JButton retry = new JButton("Continue typing?");
         JFrame popup = new JFrame();
         JTextArea timeStats = new JTextArea();
@@ -101,8 +114,8 @@ public class TypeFaster {
                         for(int i = 0; i < 5; i++) {
                             char firstChar = StringCompression.charForInt(timeStatistics[i].getPath() / 100);
                             char secondChar = StringCompression.charForInt(timeStatistics[i].getPath() % 100);
-                            timeStats.append(i + ": " + firstChar + " -> " + secondChar+ " - Time is " +
-                                    timeStatistics[i].getTime() + "\n");
+                            timeStats.append(i + ": " + firstChar + " -> " + secondChar+ " - Average time is " +
+                                    timeStatistics[i].getTime() + " ms \n");
                         }
                         Trie[] errorStatistics = backEnd.findMostErrors();
                         errorStats.setText("Most Errors: \n");
@@ -110,7 +123,7 @@ public class TypeFaster {
                             char firstChar = StringCompression.charForInt(errorStatistics[i].getPath() / 100);
                             char secondChar = StringCompression.charForInt(errorStatistics[i].getPath() % 100);
                             errorStats.append(i + ": " + firstChar + " -> " + secondChar +
-                                    " - Average number of Errors " + errorStatistics[i].getAvgErrors() + "\n");
+                                    " - Error Rate " + errorStatistics[i].getErrorRate() * 100 + "% \n");
                         }
                         popup.setLayout(new BoxLayout(popup.getContentPane(), 1));
                         popup.getContentPane().add(timeStats, BorderLayout.CENTER);
@@ -134,6 +147,8 @@ public class TypeFaster {
         }
 
         typingArea.addKeyListener(new KeyPressListener());
+        typingArea.setBorder(BorderFactory.createLineBorder(Color.black));
+        typingArea.setLineWrap(true);
         frame.getContentPane().add(display);
         frame.getContentPane().add(typingArea);
         frame.setSize(500,500);

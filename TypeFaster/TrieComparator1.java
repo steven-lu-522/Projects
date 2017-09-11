@@ -6,9 +6,9 @@ import java.util.Comparator;
 public class TrieComparator1 implements Comparator<Trie> {
     //compares based on number of errors
     public int compare(Trie t1, Trie t2) {
-        if (t1.getAvgErrors() < t2.getAvgErrors()) {
+        if (t1.getErrorRate() < t2.getErrorRate()) {
             return -1;
-        } else if (t1.getAvgErrors() < t2.getAvgErrors()) {
+        } else if (t1.getErrorRate() < t2.getErrorRate()) {
             return 0;
         } else {
             return 1;

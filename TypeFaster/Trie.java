@@ -3,7 +3,7 @@
  */
 public class Trie {
     double time;
-    double avgErrors;
+    double errorRate;
     int counter;
     int path;
     private Trie[] children;
@@ -34,9 +34,9 @@ public class Trie {
         time = 0;
         counter = 0;
     }
-    public void addEntry(double entry, int numErrors) {
+    public void addEntry(double entry, int error) {
         time = ((time * counter) + entry ) / (counter + 1);
-        avgErrors = ((avgErrors * counter) + numErrors) / (counter + 1);
+        errorRate = ((errorRate * counter) + error) / (counter + 1);
         counter++;
     }
     public int getCounter() {
@@ -48,8 +48,8 @@ public class Trie {
     public double getTime() {
         return time;
     }
-    public double getAvgErrors() {
-        return avgErrors;
+    public double getErrorRate() {
+        return errorRate;
     }
     public Trie getChild(int index) {
         return children[index];

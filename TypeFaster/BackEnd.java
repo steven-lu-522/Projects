@@ -14,7 +14,7 @@ public class BackEnd {
     //Thus, using a trie would be the fastest way of accessing that exact data point.
     private Trie data;
     private ArrayList<int[]> textSamples;
-    private int pageMin, index, numErr;
+    private int pageMin, index, err;
     private String curr;
     private long time;
     public BackEnd() {
@@ -24,7 +24,7 @@ public class BackEnd {
         index = 0;
         curr = "";
         time = 0;
-        numErr = 0;
+        err = 0;
     }
     public BackEnd(int minPageLength) {
         data = new Trie(StringCompression.getNumChars(), 2);
@@ -33,7 +33,7 @@ public class BackEnd {
         index = 0;
         curr = "";
         time = 0;
-        numErr = 0;
+        err = 0;
     }
     public int importFile(String fileName) {
         try {
@@ -79,18 +79,18 @@ public class BackEnd {
     }
     public boolean correct() {
         //Updates data after correct character was typed. Returns whether the end of the passage was reached.
-        addData((System.nanoTime() - time) / 1000000, numErr);
+        addData((System.nanoTime() - time) / 1000000, err);
         index++;
-        numErr = 0;
+        err = 0;
         return index < curr.length();
     }
     public void incorrect() {
-        numErr++;
+        err = 1;
     }
     public void newSample() {
         curr = StringCompression.decompressString(textSamples.get((int) (textSamples.size() * Math.random())));
         index = 0;
-        numErr = 0;
+        err = 0;
     }
     public String getCurrentSample() {
         return curr;
@@ -138,7 +138,7 @@ public class BackEnd {
                 if (data.getChild(i).getChild(j).getCounter() > 0) {
                     if (pq.size() < 5) {
                         pq.add(data.getChild(i).getChild(j));
-                    } else if (pq.peek().getAvgErrors() < data.getChild(i).getChild(j).getAvgErrors()) {
+                    } else if (pq.peek().getErrorRate() < data.getChild(i).getChild(j).getErrorRate()) {
                         pq.poll();
                         pq.add(data.getChild(i).getChild(j));
                     }
